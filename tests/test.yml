@@ -1,0 +1,34 @@
+---
+
+- name: Test Prometheus Nginx Exporter role
+  hosts: all
+
+  pre_tasks:
+    - name: Update apt
+      become: yes
+      apt:
+        cache_valid_time: 1800
+        update_cache: yes
+      tags:
+        - build
+
+  roles:
+    - role: sansible.prometheus_nginx_exporter
+
+  post_tasks:
+    - name: Get Prometheus Nginx Exporter service state
+      become: yes
+      service:
+        name: prometheus-nginx-exporter
+        state: started
+      register: status
+      tags:
+        - assert
+
+    - name: Assert that Prometheus Nginx Exporter has been running
+      assert:
+        that:
+          - "false == status.changed"
+          - "'started' == status.state"
+      tags:
+        - assert

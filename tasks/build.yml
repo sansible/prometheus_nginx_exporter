@@ -1,0 +1,67 @@
+---
+
+- name: Create Prometheus Nginx Exporter directories
+  become: yes
+  file:
+    path: "{{ item }}"
+    state: directory
+    owner: "{{ prometheus_nginx_exporter.user }}"
+    group: "{{ prometheus_nginx_exporter.group }}"
+    mode: 0750
+  with_items:
+    - "{{ prometheus_nginx_exporter.path.install }}"
+    - "{{ prometheus_nginx_exporter.path.log }}"
+
+- name: Copy wrapper shell script
+  become: yes
+  copy:
+    src: prometheus_exporter.sh
+    dest: "{{ prometheus_nginx_exporter.path.install }}/prometheus_exporter.sh"
+    owner: "{{ prometheus_nginx_exporter.user }}"
+    group: "{{ prometheus_nginx_exporter.group }}"
+    mode: 0755
+
+- stat:
+    path: "{{ prometheus_nginx_exporter.download_dest }}"
+  register: exporter_tar
+
+- name: Download Prometheus Nginx Exporter tarball
+  become: yes
+  get_url:
+    url: "{{ prometheus_nginx_exporter.download_url }}"
+    dest: "{{ prometheus_nginx_exporter.download_dest }}"
+    checksum: "{{ prometheus_nginx_exporter.checksum }}"
+  when: exporter_tar.stat.exists == False
+
+- name: Ensure Prometheus Nginx Exporter directory is created
+  become: yes
+  file:
+    path: "{{ prometheus_nginx_exporter.path.install }}/prometheus_nginx_exporter/"
+    state: directory
+    owner: "{{ prometheus_nginx_exporter.user }}"
+    group: "{{ prometheus_nginx_exporter.group }}"
+
+- name: Untar Prometheus Nginx Exporter tarball
+  become: yes
+  unarchive:
+    src: "{{ prometheus_nginx_exporter.download_dest }}"
+    dest: "{{ prometheus_nginx_exporter.path.install }}/prometheus_nginx_exporter"
+    owner: "{{ prometheus_nginx_exporter.user }}"
+    group: "{{ prometheus_nginx_exporter.group }}"
+    remote_src: True
+
+- name: Make Prometheus Nginx Exporter a service
+  become: yes
+  template:
+    dest: /etc/init.d/prometheus-nginx-exporter
+    mode: 0755
+    src: prometheus_nginx_exporter.sysvinit.j2
+
+- name: Enable and start Prometheus Nginx Exporter service
+  become: yes
+  service:
+    name: prometheus-nginx-exporter
+    enabled: yes
+    state: started
+  when: prometheus_nginx_exporter.start_on_boot
+
