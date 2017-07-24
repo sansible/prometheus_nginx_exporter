@@ -1,0 +1,14 @@
+---
+
+prometheus_nginx_exporter:
+  checksum: sha256:7cf6a4c1d29fb42f43e05b164ca6c2fdeeaa81484112fc312f3dc7fc22edfe35
+  download_dest: "/tmp/nginx_exporter_v0.1.0_linux_amd64.tar.gz"
+  download_url: "https://github.com/c4milo/nginx_exporter/releases/download/v0.1.0/nginx_exporter_v0.1.0_linux_amd64.tar.gz"
+  group: prometheus
+  opts: ~
+  path:
+    install: /home/prometheus
+    log: /var/log/prometheus
+    pid: /var/run/prometheus
+  start_on_boot: yes
+  user: prometheus

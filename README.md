@@ -1,17 +1,22 @@
-# Prometheus
+# prometheus_nginx_exporter
 
-Master: [![Build Status](https://travis-ci.org/sansible/prometheus_nginx_exporter.svg?branch=master)](https://travis-ci.org/sansible/prometheus_nginx_exporter)
+Master: [![Build Status](https://travis-ci.org/sansible/prometheus_nginx_exporter.svg?branch=master)](https://travis-ci.org/sansible/prometheus_nginx_exporter)  
 Develop: [![Build Status](https://travis-ci.org/sansible/prometheus_nginx_exporter.svg?branch=develop)](https://travis-ci.org/sansible/prometheus_nginx_exporter)
 
 * [ansible.cfg](#ansible-cfg)
 * [Installation and Dependencies](#installation-and-dependencies)
 * [Tags](#tags)
-* [Example](#example)
+* [Examples](#examples)
 
 This roles installs Prometheus Nginx Exporter.
 
+Prometheus Nginx Exporter makes availble Nginx metrics for collection by Prometheus server.
+
 For more information about Prometheus Nginx Exporter please visit
 [https://github.com/discordianfish/nginx_exporter](https://github.com/discordianfish/nginx_exporter).
+
+For more information about Prometheus Server please visit
+[https://prometheus.io](https://prometheus.io).
 
 
 ## ansible.cfg
@@ -25,13 +30,14 @@ hash_behaviour = merge
 ```
 
 
+
+
 ## Installation and Dependencies
 
-This role will install `sansible.users_and_groups` for managing `prometheus_nginx_exporter`
-user.
+This role will install `sansible.users_and_groups` for managing `prometheus_nginx_exporter` user.
 
-To install run `ansible-galaxy install sansible.prometheus` or add this to your
-`roles.yml`
+To install run `ansible-galaxy install sansible.prometheus_nginx_exporter` or add this to your
+`roles.yml`.
 
 ```YAML
 - name: sansible.prometheus_nginx_exporter
@@ -41,29 +47,24 @@ To install run `ansible-galaxy install sansible.prometheus` or add this to your
 and run `ansible-galaxy install -p ./roles -r roles.yml`
 
 
+
+
 ## Tags
 
-This role uses two tags: **build** and **configure**
+This role uses tags: **build** and **configure**
 
 * `build` - Installs Prometheus Nginx Exporter and all it's dependencies.
-* `configure` - Configure and ensures that the Prometheus Nginx Exporter service is running.
 
 
-## Example
+
+## Examples
+
+Simply include role in your playbook
 
 ```YAML
-- name: Install Prometheus Nginx Exporter
-  hosts: sandbox
-
-  pre_tasks:
-    - name: Update apt
-      become: yes
-      apt:
-        cache_valid_time: 1800
-        update_cache: yes
-      tags:
-        - build
+- name: Install and configure prometheus_nginx_exporter
+  hosts: "somehost"
 
   roles:
-    - name: sansible.prometheus_nginx_exporter
+    - role: sansible.prometheus_nginx_exporter
 ```
