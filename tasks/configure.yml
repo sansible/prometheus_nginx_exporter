@@ -1,0 +1,8 @@
+---
+
+- name: Start Prometheus Nginx Exporter service
+  become: yes
+  service:
+    name: prometheus-nginx-exporter
+    state: started
+  when: prometheus_nginx_exporter.start_on_boot

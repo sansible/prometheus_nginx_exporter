@@ -14,6 +14,8 @@
 
   roles:
     - role: sansible.prometheus_nginx_exporter
+      prometheus_nginx_exporter:
+        start_on_boot: yes
 
   post_tasks:
     - name: Get Prometheus Nginx Exporter service state
