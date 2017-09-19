@@ -68,3 +68,13 @@ Simply include role in your playbook
   roles:
     - role: sansible.prometheus_nginx_exporter
 ```
+
+```YAML
+- name: Install and configure prometheus_nginx_exporter
+  hosts: "somehost"
+
+  roles:
+    - role: sansible.prometheus_nginx_exporter
+      prometheus_nginx_exporter:
+        start_on_boot: yes
+```

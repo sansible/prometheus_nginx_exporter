@@ -57,11 +57,8 @@
     mode: 0755
     src: prometheus_nginx_exporter.sysvinit.j2
 
-- name: Enable and start Prometheus Nginx Exporter service
+- name: Enable Prometheus Nginx Exporter service
   become: yes
   service:
     name: prometheus-nginx-exporter
-    enabled: yes
-    state: started
-  when: prometheus_nginx_exporter.start_on_boot
-
+    enabled: "{{ prometheus_nginx_exporter.start_on_boot }}"
